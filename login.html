@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – Sistema Jurídico</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="login-bg">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="login-logo-icon">⚖️</div>
+                <h1>Sistema Jurídico</h1>
+                <p>Escritório de Advocacia</p>
+            </div>
+
+            <!-- ABA DE LOGIN -->
+            <form id="loginForm" class="form-login">
+                <h3 style="text-align:center;margin-bottom:20px;color:var(--gold)">Login</h3>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">E-mail</label>
+                    <input class="form-control" type="email" id="email" placeholder="seu@email.com" required
+                        autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="senha">Senha</label>
+                    <input class="form-control" type="password" id="senha" placeholder="••••••••" required
+                        autocomplete="current-password">
+                </div>
+
+                <div id="loginError"
+                    style="display:none;color:var(--danger);font-size:13px;margin-bottom:14px;padding:10px;background:var(--danger-bg);border-radius:var(--radius-sm);">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full btn-lg" id="btnLogin">
+                    Entrar no Sistema
+                </button>
+
+                <p style="text-align:center;font-size:12px;margin-top:14px;">
+                    Não tem conta? 
+                    <a href="#" onclick="documento_id('loginForm').style.display='none'; documento_id('registroForm').style.display='block';" 
+                       style="color:var(--gold);cursor:pointer">Crie uma aqui</a>
+                </p>
+            </form>
+
+            <!-- ABA DE REGISTRO -->
+            <form id="registroForm" class="form-registro" style="display:none;">
+                <h3 style="text-align:center;margin-bottom:20px;color:var(--gold)">Criar Conta</h3>
+                
+                <div class="form-group">
+                    <label class="form-label" for="nome">Nome Completo</label>
+                    <input class="form-control" type="text" id="nome" placeholder="João da Silva" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="emailReg">E-mail</label>
+                    <input class="form-control" type="email" id="emailReg" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="senhaReg">Senha</label>
+                    <input class="form-control" type="password" id="senhaReg" placeholder="••••••••" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="telefoneReg">Telefone (opcional)</label>
+                    <input class="form-control" type="tel" id="telefoneReg" placeholder="(11) 99999-9999">
+                </div>
+
+                <div id="registroError"
+                    style="display:none;color:var(--danger);font-size:13px;margin-bottom:14px;padding:10px;background:var(--danger-bg);border-radius:var(--radius-sm);">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full btn-lg" id="btnRegistro">
+                    Criar Conta
+                </button>
+
+                <p style="text-align:center;font-size:12px;margin-top:14px;">
+                    Já tem conta?
+                    <a href="#" onclick="documento_id('registroForm').style.display='none'; documento_id('loginForm').style.display='block';" 
+                       style="color:var(--gold);cursor:pointer">Faça login</a>
+                </p>
+            </form>
+
+            <hr class="divider" style="margin-top:28px">
+            <p style="text-align:center;font-size:12px;color:var(--text-muted)">
+                ☁️ Dados sincronizados na nuvem | Acesse de qualquer dispositivo
+            </p>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth-api.js"></script>
+    <script>
+        function documento_id(id) { return document.getElementById(id); }
+
+        // LOGIN
+        documento_id('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = documento_id('btnLogin');
+            const errEl = documento_id('loginError');
+            errEl.style.display = 'none';
+            btn.innerHTML = '<span class="spinner"></span> Conectando...';
+            btn.disabled = true;
+
+            try {
+                const res = await Auth.login(
+                    documento_id('email').value,
+                    documento_id('senha').value
+                );
+                if (res.ok) {
+                    mostrarToast('✅ Bem-vindo, ' + res.user.nome + '!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 500);
+                } else {
+                    errEl.textContent = res.msg || 'Erro ao fazer login';
+                    errEl.style.display = 'block';
+                    btn.innerHTML = 'Entrar no Sistema';
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                errEl.textContent = 'Erro de conexão com servidor';
+                errEl.style.display = 'block';
+                btn.innerHTML = 'Entrar no Sistema';
+                btn.disabled = false;
+            }
+        });
+
+        // REGISTRO
+        documento_id('registroForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = documento_id('btnRegistro');
+            const errEl = documento_id('registroError');
+            errEl.style.display = 'none';
+            btn.innerHTML = '<span class="spinner"></span> Criando conta...';
+            btn.disabled = true;
+
+            try {
+                const res = await Auth.registro(
+                    documento_id('nome').value,
+                    documento_id('emailReg').value,
+                    documento_id('senhaReg').value,
+                    documento_id('telefoneReg').value
+                );
+                if (res.ok) {
+                    mostrarToast('✅ Conta criada com sucesso!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 500);
+                } else {
+                    errEl.textContent = res.msg || 'Erro ao criar conta';
+                    errEl.style.display = 'block';
+                    btn.innerHTML = 'Criar Conta';
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                errEl.textContent = error.message || 'Erro de conexão com servidor';
+                errEl.style.display = 'block';
+                btn.innerHTML = 'Criar Conta';
+                btn.disabled = false;
+            }
+        });
+
+        function mostrarToast(msg, tipo = 'info') {
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + tipo;
+            toast.innerHTML = '✓ ' + msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+</body>
+
+</html>

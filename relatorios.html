@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios – Sistema Jurídico</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">⚖️</div>
+                <div class="sidebar-logo-text">
+                    <h2 id="nomeEscritorioSidebar">Escritório</h2>
+                    <p>Sistema Jurídico</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Principal</div>
+                <div class="nav-item" data-href="dashboard.html"><span class="nav-icon">📊</span><span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-href="clientes.html"><span class="nav-icon">👥</span><span>Clientes</span>
+                </div>
+                <div class="nav-label">Financeiro</div>
+                <div class="nav-item" data-href="financeiro.html"><span class="nav-icon">💰</span><span>Caixa</span>
+                </div>
+                <div class="nav-item" data-href="cobrancas.html"><span class="nav-icon">📄</span><span>Cobranças</span>
+                </div>
+                <div class="nav-item active" data-href="relatorios.html"><span
+                        class="nav-icon">📈</span><span>Relatórios</span></div>
+                <div class="nav-label">Administração</div>
+                <div class="nav-item" data-href="usuarios.html"><span class="nav-icon">🔑</span><span>Usuários</span>
+                </div>
+                <div class="nav-item" data-href="auditoria.html"><span class="nav-icon">🔍</span><span>Auditoria</span>
+                </div>
+                <div class="nav-item" data-href="configuracoes.html"><span
+                        class="nav-icon">⚙️</span><span>Configurações</span></div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="user-name" id="sidebarUserName">Usuário</div>
+                        <div class="user-role" id="sidebarUserRole">Admin</div>
+                    </div>
+                    <button class="btn-logout" id="btnLogout" title="Sair">⏏</button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <div class="topbar">
+                <button id="menuToggle" class="btn-ghost">☰</button>
+                <span class="topbar-title">Relatórios Financeiros</span>
+                <div class="topbar-right">
+                    <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ Imprimir PDF</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="card mb-24" style="background:var(--bg-secondary);border:1px solid var(--border)">
+                    <div class="form-row border" style="align-items:flex-end">
+                        <div class="form-group" style="margin:0">
+                            <label class="form-label">Data Inicial</label>
+                            <input class="form-control" type="date" id="relDataInicio">
+                        </div>
+                        <div class="form-group" style="margin:0">
+                            <label class="form-label">Data Final</label>
+                            <input class="form-control" type="date" id="relDataFim">
+                        </div>
+                        <div class="form-group" style="margin:0">
+                            <label class="form-label">Cliente (opcional)</label>
+                            <select class="form-control" id="relCliente">
+                                <option value="">Todos os clientes</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="btnGerarRelatorio" style="height:42px;width:100%">Gerar
+                            Relatório</button>
+                    </div>
+                </div>
+
+                <!-- Resumo Relatorio -->
+                <div id="relatorioContainer" style="display:none">
+                    <div class="section-header">
+                        <span class="section-title">Resumo do Período</span>
+                        <span class="badge badge-gold" id="txtPeriodo"></span>
+                    </div>
+
+                    <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom:24px">
+                        <div class="stat-card" style="padding:16px">
+                            <div class="stat-label">Total Entradas</div>
+                            <div class="stat-value text-success" id="rTotalIn">R$ 0</div>
+                        </div>
+                        <div class="stat-card" style="padding:16px">
+                            <div class="stat-label">Total Saídas</div>
+                            <div class="stat-value text-danger" id="rTotalOut">R$ 0</div>
+                        </div>
+                        <div class="stat-card" style="padding:16px">
+                            <div class="stat-label">Saldo Período</div>
+                            <div class="stat-value text-gold" id="rSaldo">R$ 0</div>
+                        </div>
+                        <div class="stat-card" style="padding:16px">
+                            <div class="stat-label">Cobranças Pendentes</div>
+                            <div class="stat-value text-warning" id="rPendente">R$ 0</div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela entradas/saidas -->
+                    <h3 style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;text-transform:uppercase">
+                        Movimentações de Caixa</h3>
+                    <div class="table-wrapper mb-24">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Descrição</th>
+                                    <th>Cliente</th>
+                                    <th>Tipo</th>
+                                    <th style="text-align:right">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblRelCaixa"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Tabela cobrancas (aparece se filtrou por cliente) -->
+                    <div id="blocoCobrancasCliente" style="display:none">
+                        <h3
+                            style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;text-transform:uppercase">
+                            Resumo de Cobranças do Cliente</h3>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Descrição</th>
+                                        <th>Vencimento</th>
+                                        <th>Método</th>
+                                        <th>Status</th>
+                                        <th style="text-align:right">Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblRelCob"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Placeholder inical -->
+                <div class="empty-state" id="relPlaceholder">
+                    <div class="empty-state-icon">📄</div>
+                    <div class="empty-state-title">Relatórios Financeiros</div>
+                    <div class="empty-state-text">Selecione o período acima e clique em Gerar Relatório para analisar os
+                        resultados.</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/relatorios.js"></script>
+</body>
+
+</html>
+

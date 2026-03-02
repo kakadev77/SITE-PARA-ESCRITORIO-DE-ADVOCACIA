@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários – Sistema Jurídico</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">⚖️</div>
+                <div class="sidebar-logo-text">
+                    <h2 id="nomeEscritorioSidebar">Escritório</h2>
+                    <p>Sistema Jurídico</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Principal</div>
+                <div class="nav-item" data-href="dashboard.html"><span class="nav-icon">📊</span><span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-href="clientes.html"><span class="nav-icon">👥</span><span>Clientes</span>
+                </div>
+                <div class="nav-label">Financeiro</div>
+                <div class="nav-item" data-href="financeiro.html"><span class="nav-icon">💰</span><span>Caixa</span>
+                </div>
+                <div class="nav-item" data-href="cobrancas.html"><span class="nav-icon">📄</span><span>Cobranças</span>
+                </div>
+                <div class="nav-item" data-href="relatorios.html"><span
+                        class="nav-icon">📈</span><span>Relatórios</span></div>
+                <div class="nav-label">Administração</div>
+                <div class="nav-item active" data-href="usuarios.html"><span
+                        class="nav-icon">🔑</span><span>Usuários</span></div>
+                <div class="nav-item" data-href="auditoria.html"><span class="nav-icon">🔍</span><span>Auditoria</span>
+                </div>
+                <div class="nav-item" data-href="configuracoes.html"><span
+                        class="nav-icon">⚙️</span><span>Configurações</span></div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="user-name" id="sidebarUserName">Usuário</div>
+                        <div class="user-role" id="sidebarUserRole">Admin</div>
+                    </div>
+                    <button class="btn-logout" id="btnLogout" title="Sair">⏏</button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <div class="topbar">
+                <button id="menuToggle" class="btn-ghost">☰</button>
+                <span class="topbar-title">Usuários do Sistema</span>
+                <div class="topbar-right">
+                    <button class="btn btn-primary btn-sm" id="btnNovoUsuario">+ Novo Usuário</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>E-mail (Login)</th>
+                                <th>Perfil</th>
+                                <th>Status</th>
+                                <th>Criado em</th>
+                                <th style="text-align:right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblUsuarios"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL USUARIO -->
+    <div class="modal-overlay" id="modalUsuario">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title" id="modalUsrTitulo">Novo Usuário</span>
+                <button class="modal-close" onclick="UI.closeModal('modalUsuario')">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="usrId">
+                <div class="form-group">
+                    <label class="form-label">Nome Completo *</label>
+                    <input class="form-control" type="text" id="usrNome" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">E-mail (Login) *</label>
+                    <input class="form-control" type="email" id="usrEmail" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Perfil de Acesso *</label>
+                        <select class="form-control" id="usrPerfil">
+                            <option value="admin">Administrador (Total)</option>
+                            <option value="financeiro">Financeiro (Caixa e Cobranças)</option>
+                            <option value="advogado">Advogado (Clientes e Docs)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" id="usrStatus">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Senha *</label>
+                    <input class="form-control" type="password" id="usrSenha" placeholder="Digitar para nova senha...">
+                    <small style="color:var(--text-muted);font-size:11px" id="usrSenhaHint">Deixe em branco para manter
+                        a atual se estiver editando.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="UI.closeModal('modalUsuario')">Cancelar</button>
+                <button class="btn btn-primary" id="btnSalvarUsuario">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/usuarios.js"></script>
+</body>
+
+</html>
+

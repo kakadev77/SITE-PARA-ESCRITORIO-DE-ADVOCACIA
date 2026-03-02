@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações – Sistema Jurídico</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">⚖️</div>
+                <div class="sidebar-logo-text">
+                    <h2 id="nomeEscritorioSidebar">Escritório</h2>
+                    <p>Sistema Jurídico</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Principal</div>
+                <div class="nav-item" data-href="dashboard.html"><span class="nav-icon">📊</span><span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-href="clientes.html"><span class="nav-icon">👥</span><span>Clientes</span>
+                </div>
+                <div class="nav-label">Financeiro</div>
+                <div class="nav-item" data-href="financeiro.html"><span class="nav-icon">💰</span><span>Caixa</span>
+                </div>
+                <div class="nav-item" data-href="cobrancas.html"><span class="nav-icon">📄</span><span>Cobranças</span>
+                </div>
+                <div class="nav-item" data-href="relatorios.html"><span
+                        class="nav-icon">📈</span><span>Relatórios</span></div>
+                <div class="nav-label">Administração</div>
+                <div class="nav-item" data-href="usuarios.html"><span class="nav-icon">🔑</span><span>Usuários</span>
+                </div>
+                <div class="nav-item" data-href="auditoria.html"><span class="nav-icon">🔍</span><span>Auditoria</span>
+                </div>
+                <div class="nav-item active" data-href="configuracoes.html"><span
+                        class="nav-icon">⚙️</span><span>Configurações</span></div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="user-name" id="sidebarUserName">Usuário</div>
+                        <div class="user-role" id="sidebarUserRole">Admin</div>
+                    </div>
+                    <button class="btn-logout" id="btnLogout" title="Sair">⏏</button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <div class="topbar">
+                <button id="menuToggle" class="btn-ghost">☰</button>
+                <span class="topbar-title">Configurações do Sistema</span>
+            </div>
+
+            <div class="page-content" style="max-width:800px">
+
+                <!-- Dados do Escritório -->
+                <div class="card mb-24">
+                    <div class="section-header">
+                        <span class="section-title">Dados do Escritório</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nome do Escritório *</label>
+                        <input class="form-control" type="text" id="cfgNome">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">CNPJ</label>
+                            <input class="form-control" type="text" id="cfgCnpj" data-mask="cpfcnpj">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Telefone de Contato</label>
+                            <input class="form-control" type="text" id="cfgTel" data-mask="phone">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Endereço Completo</label>
+                        <input class="form-control" type="text" id="cfgEndereco">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">E-mail Público</label>
+                        <input class="form-control" type="email" id="cfgEmail">
+                    </div>
+                    <button class="btn btn-primary mt-8" id="btnSalvarDados">Salvar Dados</button>
+                </div>
+
+                <!-- Integração Pagamentos -->
+                <div class="card mb-24" style="border-color:var(--gold-border)">
+                    <div class="section-header mb-8">
+                        <div style="display:flex;align-items:center;gap:10px">
+                            <span class="section-title">Integração Asaas (Pix e Boleto)</span>
+                            <span class="badge badge-warning" id="badgeAsaas">Inativo</span>
+                        </div>
+                    </div>
+                    <p class="mb-16" style="font-size:13px;color:var(--text-secondary)">Insira sua API Key do Asaas para
+                        permitir a geração de cobranças reais com Pix Integrado (QR Code) e Boletos. <a
+                            href="https://asaas.com" target="_blank" style="color:var(--gold)">Crie sua conta aqui</a>.
+                    </p>
+
+                    <div class="form-group">
+                        <label class="form-label">Ambiente da API *</label>
+                        <select class="form-control" id="cfgAsaasEnv">
+                            <option value="sandbox">Sandbox (Testes - sandbox.asaas.com)</option>
+                            <option value="production">Produção (Real - asaas.com)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">API Key (Access Token)</label>
+                        <input class="form-control" type="password" id="cfgAsaasKey"
+                            placeholder="Ex: $aact_YTU5YTE0M2M2N2I4... Mantenha em branco se não for usar.">
+                    </div>
+
+                    <button class="btn btn-primary mt-8" id="btnSalvarAsaas">Salvar Integração</button>
+                </div>
+
+                <!-- Backup / Reset -->
+                <div class="card" style="border-color:var(--danger-border);background:rgba(239,68,68,0.02)">
+                    <div class="section-header">
+                        <span class="section-title text-danger">Zona de Perigo</span>
+                    </div>
+                    <div style="display:flex;gap:12px">
+                        <button class="btn btn-secondary" id="btnExport" title="Exportar dados localStorage">📦 Exportar
+                            Backup (JSON)</button>
+                        <button class="btn btn-danger" id="btnReset">🧨 Apagar Todos os Dados</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/configuracoes.js"></script>
+</body>
+
+</html>
+

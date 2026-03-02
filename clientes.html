@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes – Sistema Jurídico</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">⚖️</div>
+                <div class="sidebar-logo-text">
+                    <h2 id="nomeEscritorioSidebar">Escritório</h2>
+                    <p>Sistema Jurídico</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Principal</div>
+                <div class="nav-item" data-href="dashboard.html"><span class="nav-icon">📊</span><span>Dashboard</span>
+                </div>
+                <div class="nav-item active" data-href="clientes.html"><span
+                        class="nav-icon">👥</span><span>Clientes</span></div>
+                <div class="nav-label">Financeiro</div>
+                <div class="nav-item" data-href="financeiro.html"><span class="nav-icon">💰</span><span>Caixa</span>
+                </div>
+                <div class="nav-item" data-href="cobrancas.html"><span class="nav-icon">📄</span><span>Cobranças</span>
+                </div>
+                <div class="nav-item" data-href="relatorios.html"><span
+                        class="nav-icon">📈</span><span>Relatórios</span></div>
+                <div class="nav-label">Administração</div>
+                <div class="nav-item" data-href="usuarios.html"><span class="nav-icon">🔑</span><span>Usuários</span>
+                </div>
+                <div class="nav-item" data-href="auditoria.html"><span class="nav-icon">🔍</span><span>Auditoria</span>
+                </div>
+                <div class="nav-item" data-href="configuracoes.html"><span
+                        class="nav-icon">⚙️</span><span>Configurações</span></div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="user-name" id="sidebarUserName">Usuário</div>
+                        <div class="user-role" id="sidebarUserRole">Admin</div>
+                    </div>
+                    <button class="btn-logout" id="btnLogout" title="Sair">⏏</button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <div class="topbar">
+                <button id="menuToggle" class="btn-ghost">☰</button>
+                <span class="topbar-title">Clientes</span>
+                <div class="topbar-right">
+                    <button class="btn btn-primary btn-sm" id="btnNovoCliente">+ Novo Cliente</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <!-- FILTROS -->
+                <div class="filters-bar">
+                    <div class="search-input-wrap">
+                        <span class="search-icon">🔍</span>
+                        <input class="search-input" type="text" id="searchClientes"
+                            placeholder="Buscar por nome, CPF/CNPJ ou e-mail...">
+                    </div>
+                    <select class="filter-select" id="filterStatus">
+                        <option value="">Todos os status</option>
+                        <option value="ativo">Ativo</option>
+                        <option value="inativo">Inativo</option>
+                    </select>
+                </div>
+
+                <!-- TABELA -->
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>CPF/CNPJ</th>
+                                <th>Telefone</th>
+                                <th>E-mail</th>
+                                <th>Status</th>
+                                <th>Cadastrado em</th>
+                                <th style="text-align:right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblClientes"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CLIENTE -->
+    <div class="modal-overlay" id="modalCliente">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <span class="modal-title" id="modalClienteTitulo">Novo Cliente</span>
+                <button class="modal-close" onclick="UI.closeModal('modalCliente')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="dados">Dados Pessoais</button>
+                    <button class="tab-btn" data-tab="docs" id="tabDocsBtnCliente">Documentos</button>
+                </div>
+
+                <!-- TAB DADOS -->
+                <div class="tab-content active" id="tab-dados">
+                    <form id="formCliente">
+                        <input type="hidden" id="clienteId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Nome completo / Razão social *</label>
+                                <input class="form-control" type="text" id="cNome" required
+                                    placeholder="Nome do cliente">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">CPF ou CNPJ *</label>
+                                <input class="form-control" type="text" id="cCpfCnpj" data-mask="cpfcnpj" required
+                                    placeholder="000.000.000-00">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">RG</label>
+                                <input class="form-control" type="text" id="cRg" placeholder="00.000.000-0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Data de nascimento</label>
+                                <input class="form-control" type="date" id="cNascimento">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Endereço completo</label>
+                            <input class="form-control" type="text" id="cEndereco"
+                                placeholder="Rua, número, bairro, cidade/UF">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">E-mail</label>
+                                <input class="form-control" type="email" id="cEmail" placeholder="email@exemplo.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telefone / WhatsApp</label>
+                                <input class="form-control" type="text" id="cTelefone" data-mask="phone"
+                                    placeholder="(11) 99999-9999">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-control" id="cStatus">
+                                    <option value="ativo">Ativo</option>
+                                    <option value="inativo">Inativo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Observações jurídicas</label>
+                            <textarea class="form-control" id="cObs" placeholder="Processo nº, notas, etc."></textarea>
+                        </div>
+                        <div class="section-header mt-16" style="margin-bottom:8px">
+                            <span class="section-title" style="font-size:14px">📁 Anexar Documentos Rápidos</span>
+                        </div>
+                        <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px">Você pode anexar
+                            fotos/documentos iniciais do cliente agora, ou gerenciar arquivos completos na aba
+                            Documentos depois de salvar.</p>
+                        <div class="form-row border"
+                            style="padding:12px;background:var(--bg-primary);border-radius:var(--radius-sm)">
+                            <div class="form-group" style="margin-bottom:0">
+                                <label class="form-label">Tipo do documento inicial</label>
+                                <select class="form-control" id="cDocInicialTipo">
+                                    <option value="RG">RG</option>
+                                    <option value="CPF">CPF</option>
+                                    <option value="CNH">CNH</option>
+                                    <option value="Contrato">Contrato</option>
+                                    <option value="Comprovante">Comprovante de Endereço</option>
+                                    <option value="Outro">Outro (Foto/Geral)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0">
+                                <label class="form-label">Selecionar arquivo...</label>
+                                <input class="form-control" type="file" id="cDocInicialArquivo"
+                                    accept=".pdf,.jpg,.jpeg,.png,.webp">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- TAB DOCUMENTOS -->
+                <div class="tab-content" id="tab-docs">
+                    <div class="section-header">
+                        <span class="section-title" style="font-size:14px">Documentos do Cliente</span>
+                        <button class="btn btn-secondary btn-sm" id="btnAddDoc">+ Adicionar Documento</button>
+                    </div>
+
+                    <!-- Upload form -->
+                    <div id="docUploadForm" style="display:none;margin-bottom:20px">
+                        <div class="card" style="padding:16px">
+                            <div class="form-row">
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="form-label">Tipo do documento</label>
+                                    <select class="form-control" id="docTipo">
+                                        <option value="RG">RG</option>
+                                        <option value="CPF">CPF</option>
+                                        <option value="Contrato">Contrato</option>
+                                        <option value="Procuração">Procuração</option>
+                                        <option value="Comprovante">Comprovante de Residência</option>
+                                        <option value="Certidão">Certidão</option>
+                                        <option value="Outro">Outro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0">
+                                    <label class="form-label">Arquivo (PDF / Imagem)</label>
+                                    <input class="form-control" type="file" id="docArquivo"
+                                        accept=".pdf,.jpg,.jpeg,.png,.webp">
+                                </div>
+                            </div>
+                            <div style="margin-top:12px;display:flex;gap:8px">
+                                <button class="btn btn-primary btn-sm" id="btnSalvarDoc">Salvar Documento</button>
+                                <button class="btn btn-secondary btn-sm" id="btnCancelarDoc">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Arquivo</th>
+                                    <th>Data de envio</th>
+                                    <th>Usuário</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDocumentos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="modalClienteFooter">
+                <button class="btn btn-secondary" onclick="UI.closeModal('modalCliente')">Cancelar</button>
+                <button class="btn btn-primary" id="btnSalvarCliente">Salvar Cliente</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/clientes.js"></script>
+</body>
+
+</html>
+

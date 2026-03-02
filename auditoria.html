@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoria – Sistema Jurídico</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">⚖️</div>
+                <div class="sidebar-logo-text">
+                    <h2 id="nomeEscritorioSidebar">Escritório</h2>
+                    <p>Sistema Jurídico</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Principal</div>
+                <div class="nav-item" data-href="dashboard.html"><span class="nav-icon">📊</span><span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-href="clientes.html"><span class="nav-icon">👥</span><span>Clientes</span>
+                </div>
+                <div class="nav-label">Financeiro</div>
+                <div class="nav-item" data-href="financeiro.html"><span class="nav-icon">💰</span><span>Caixa</span>
+                </div>
+                <div class="nav-item" data-href="cobrancas.html"><span class="nav-icon">📄</span><span>Cobranças</span>
+                </div>
+                <div class="nav-item" data-href="relatorios.html"><span
+                        class="nav-icon">📈</span><span>Relatórios</span></div>
+                <div class="nav-label">Administração</div>
+                <div class="nav-item" data-href="usuarios.html"><span class="nav-icon">🔑</span><span>Usuários</span>
+                </div>
+                <div class="nav-item active" data-href="auditoria.html"><span
+                        class="nav-icon">🔍</span><span>Auditoria</span></div>
+                <div class="nav-item" data-href="configuracoes.html"><span
+                        class="nav-icon">⚙️</span><span>Configurações</span></div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="user-name" id="sidebarUserName">Usuário</div>
+                        <div class="user-role" id="sidebarUserRole">Admin</div>
+                    </div>
+                    <button class="btn-logout" id="btnLogout" title="Sair">⏏</button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <div class="topbar">
+                <button id="menuToggle" class="btn-ghost">☰</button>
+                <span class="topbar-title">Logs de Auditoria</span>
+                <div class="topbar-right">
+                    <span class="badge badge-warning">Restrito a Administradores</span>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="filters-bar">
+                    <div class="search-input-wrap" style="width:300px">
+                        <span class="search-icon">🔍</span>
+                        <input class="search-input" type="text" id="searchAudit"
+                            placeholder="Buscar usuário, ação ou detalhe...">
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data e Hora</th>
+                                <th>Usuário (E-mail)</th>
+                                <th>Ação</th>
+                                <th>Detalhe</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblAudit"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/auditoria.js"></script>
+</body>
+
+</html>
+

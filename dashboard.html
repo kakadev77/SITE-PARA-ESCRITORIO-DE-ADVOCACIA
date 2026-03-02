@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard – Sistema Jurídico</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+    <div class="app-layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">⚖️</div>
+                <div class="sidebar-logo-text">
+                    <h2 id="nomeEscritorioSidebar">Escritório</h2>
+                    <p>Sistema Jurídico</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Principal</div>
+                <div class="nav-item active" data-href="dashboard.html"><span
+                        class="nav-icon">📊</span><span>Dashboard</span></div>
+                <div class="nav-item" data-href="clientes.html"><span class="nav-icon">👥</span><span>Clientes</span>
+                </div>
+                <div class="nav-label">Financeiro</div>
+                <div class="nav-item" data-href="financeiro.html"><span class="nav-icon">💰</span><span>Caixa</span>
+                </div>
+                <div class="nav-item" data-href="cobrancas.html"><span class="nav-icon">📄</span><span>Cobranças</span>
+                </div>
+                <div class="nav-item" data-href="relatorios.html"><span
+                        class="nav-icon">📈</span><span>Relatórios</span></div>
+                <div class="nav-label">Administração</div>
+                <div class="nav-item" data-href="usuarios.html"><span class="nav-icon">🔑</span><span>Usuários</span>
+                </div>
+                <div class="nav-item" data-href="auditoria.html"><span class="nav-icon">🔍</span><span>Auditoria</span>
+                </div>
+                <div class="nav-item" data-href="configuracoes.html"><span
+                        class="nav-icon">⚙️</span><span>Configurações</span></div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="user-name" id="sidebarUserName">Usuário</div>
+                        <div class="user-role" id="sidebarUserRole">Admin</div>
+                    </div>
+                    <button class="btn-logout" id="btnLogout" title="Sair">⏏</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-content">
+            <div class="topbar">
+                <button id="menuToggle" class="btn-ghost" style="display:none">☰</button>
+                <span class="topbar-title">Dashboard</span>
+                <span class="topbar-subtitle" id="topbarDate"></span>
+                <div class="topbar-right">
+                    <button class="btn btn-primary btn-sm" onclick="window.location.href='clientes.html'">+ Novo
+                        Cliente</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <!-- STAT CARDS -->
+                <div class="stat-grid" id="statGrid">
+                    <div class="stat-card" style="--accent:var(--gold);--icon-bg:var(--gold-subtle)">
+                        <div class="stat-icon">💵</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Saldo atual</div>
+                            <div class="stat-value" id="statSaldo">R$ 0</div>
+                            <div class="stat-sub">Entradas – Saídas</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="--accent:var(--warning);--icon-bg:var(--warning-bg)">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-info">
+                            <div class="stat-label">A Receber</div>
+                            <div class="stat-value" id="statAReceber">R$ 0</div>
+                            <div class="stat-sub">Cobranças pendentes</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="--accent:var(--success);--icon-bg:var(--success-bg)">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Recebido (mês)</div>
+                            <div class="stat-value" id="statRecebido">R$ 0</div>
+                            <div class="stat-sub">Entradas no mês atual</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="--accent:var(--danger);--icon-bg:var(--danger-bg)">
+                        <div class="stat-icon">📤</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Despesas (mês)</div>
+                            <div class="stat-value" id="statDespesas">R$ 0</div>
+                            <div class="stat-sub">Saídas no mês atual</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATS SECONDARIOS -->
+                <div class="stat-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 28px;">
+                    <div class="stat-card" style="--accent:var(--info);--icon-bg:var(--info-bg)">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Total de Clientes</div>
+                            <div class="stat-value" id="statClientes">0</div>
+                            <div class="stat-sub">Cadastros ativos</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="--accent:var(--warning);--icon-bg:var(--warning-bg)">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Cobranças Vencidas</div>
+                            <div class="stat-value" id="statVencidas">0</div>
+                            <div class="stat-sub">Requer atenção</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="--accent:var(--success);--icon-bg:var(--success-bg)">
+                        <div class="stat-icon">📄</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Cobranças Ativas</div>
+                            <div class="stat-value" id="statCobAtivas">0</div>
+                            <div class="stat-sub">Pendentes + Pagas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHARTS -->
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <div class="chart-card-title">Entradas × Saídas – Últimos 6 meses</div>
+                        <canvas id="chartFluxo" height="90"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-card-title">Cobranças por método</div>
+                        <canvas id="chartMetodo" height="200"></canvas>
+                    </div>
+                </div>
+
+                <!-- ÚLTIMAS MOVIMENTAÇÕES -->
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-title">Últimas Movimentações</span>
+                        <button class="btn btn-secondary btn-sm" onclick="window.location.href='financeiro.html'">Ver
+                            todas</button>
+                    </div>
+                    <div class="table-wrapper" style="border:none">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Descrição</th>
+                                    <th>Cliente</th>
+                                    <th>Tipo</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblUltimasMov"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
+

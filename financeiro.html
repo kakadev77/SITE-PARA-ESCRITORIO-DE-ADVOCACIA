@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caixa – Sistema Jurídico</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">⚖️</div>
+                <div class="sidebar-logo-text">
+                    <h2 id="nomeEscritorioSidebar">Escritório</h2>
+                    <p>Sistema Jurídico</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-label">Principal</div>
+                <div class="nav-item" data-href="dashboard.html"><span class="nav-icon">📊</span><span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-href="clientes.html"><span class="nav-icon">👥</span><span>Clientes</span>
+                </div>
+                <div class="nav-label">Financeiro</div>
+                <div class="nav-item active" data-href="financeiro.html"><span
+                        class="nav-icon">💰</span><span>Caixa</span></div>
+                <div class="nav-item" data-href="cobrancas.html"><span class="nav-icon">📄</span><span>Cobranças</span>
+                </div>
+                <div class="nav-item" data-href="relatorios.html"><span
+                        class="nav-icon">📈</span><span>Relatórios</span></div>
+                <div class="nav-label">Administração</div>
+                <div class="nav-item" data-href="usuarios.html"><span class="nav-icon">🔑</span><span>Usuários</span>
+                </div>
+                <div class="nav-item" data-href="auditoria.html"><span class="nav-icon">🔍</span><span>Auditoria</span>
+                </div>
+                <div class="nav-item" data-href="configuracoes.html"><span
+                        class="nav-icon">⚙️</span><span>Configurações</span></div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="user-name" id="sidebarUserName">Usuário</div>
+                        <div class="user-role" id="sidebarUserRole">Admin</div>
+                    </div>
+                    <button class="btn-logout" id="btnLogout" title="Sair">⏏</button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <div class="topbar">
+                <button id="menuToggle" class="btn-ghost">☰</button>
+                <span class="topbar-title">Caixa Financeiro</span>
+                <div class="topbar-right">
+                    <button class="btn btn-secondary btn-sm" id="btnNovaEntrada">+ Entrada</button>
+                    <button class="btn btn-primary btn-sm" id="btnNovaSaida">+ Saída/Despesa</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <!-- SALDO CARDS -->
+                <div class="stat-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom:24px">
+                    <div class="stat-card" style="--accent:var(--gold);--icon-bg:var(--gold-subtle)">
+                        <div class="stat-icon">💵</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Saldo Total</div>
+                            <div class="stat-value" id="saldoTotal">R$ 0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="--accent:var(--success);--icon-bg:var(--success-bg)">
+                        <div class="stat-icon">↑</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Total Entradas</div>
+                            <div class="stat-value" id="totalEntradas">R$ 0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="--accent:var(--danger);--icon-bg:var(--danger-bg)">
+                        <div class="stat-icon">↓</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Total Saídas</div>
+                            <div class="stat-value" id="totalSaidas">R$ 0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card" style="--accent:var(--info);--icon-bg:var(--info-bg)">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-info">
+                            <div class="stat-label">Saldo do Mês</div>
+                            <div class="stat-value" id="saldoMes">R$ 0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FILTROS -->
+                <div class="filters-bar">
+                    <div class="search-input-wrap" style="max-width:280px">
+                        <span class="search-icon">🔍</span>
+                        <input class="search-input" type="text" id="searchCaixa" placeholder="Buscar descrição...">
+                    </div>
+                    <select class="filter-select" id="filterTipo">
+                        <option value="">Entradas e Saídas</option>
+                        <option value="entrada">Entradas</option>
+                        <option value="saida">Saídas</option>
+                    </select>
+                    <select class="filter-select" id="filterCliente">
+                        <option value="">Todos os clientes</option>
+                    </select>
+                    <input class="filter-select" type="month" id="filterMes" title="Filtrar por mês">
+                    <button class="btn btn-secondary btn-sm" id="btnLimparFiltros">Limpar</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Cliente</th>
+                                <th>Categoria</th>
+                                <th>Tipo</th>
+                                <th>Usuário</th>
+                                <th>Status</th>
+                                <th style="text-align:right">Valor</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblCaixa"></tbody>
+                        <tfoot id="tfootCaixa"></tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ENTRADA -->
+    <div class="modal-overlay" id="modalEntrada">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">Nova Entrada</span>
+                <button class="modal-close" onclick="UI.closeModal('modalEntrada')">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="entradaId">
+                <div class="form-group">
+                    <label class="form-label">Cliente (opcional)</label>
+                    <select class="form-control" id="eCliente">
+                        <option value="">— Sem cliente —</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Valor *</label>
+                        <input class="form-control" type="number" id="eValor" step="0.01" min="0.01" placeholder="0,00"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Data *</label>
+                        <input class="form-control" type="date" id="eData" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descrição *</label>
+                    <input class="form-control" type="text" id="eDescricao"
+                        placeholder="Ex: Honorários processo nº 1234" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Forma de pagamento</label>
+                        <select class="form-control" id="eFormaPagamento">
+                            <option value="pix">Pix</option>
+                            <option value="boleto">Boleto</option>
+                            <option value="transferencia">Transferência</option>
+                            <option value="dinheiro">Dinheiro</option>
+                            <option value="cartao">Cartão</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" id="eStatus">
+                            <option value="pago">Pago</option>
+                            <option value="pendente">Pendente</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="UI.closeModal('modalEntrada')">Cancelar</button>
+                <button class="btn btn-primary" id="btnSalvarEntrada">Salvar Entrada</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SAIDA -->
+    <div class="modal-overlay" id="modalSaida">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">Nova Saída / Despesa</span>
+                <button class="modal-close" onclick="UI.closeModal('modalSaida')">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="saidaId">
+                <div class="form-group">
+                    <label class="form-label">Categoria *</label>
+                    <select class="form-control" id="sCategoria">
+                        <option value="custas">Custas processuais</option>
+                        <option value="administrativo">Despesas administrativas</option>
+                        <option value="aluguel">Aluguel</option>
+                        <option value="salario">Salários</option>
+                        <option value="cartorio">Cartório</option>
+                        <option value="material">Material de escritório</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Cliente vinculado (opcional)</label>
+                    <select class="form-control" id="sCliente">
+                        <option value="">— Sem cliente —</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Valor *</label>
+                        <input class="form-control" type="number" id="sValor" step="0.01" min="0.01" placeholder="0,00"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Data *</label>
+                        <input class="form-control" type="date" id="sData" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Descrição *</label>
+                    <input class="form-control" type="text" id="sDescricao" placeholder="Ex: Custas processo nº 5678"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-control" id="sStatus">
+                        <option value="pago">Pago</option>
+                        <option value="pendente">Pendente</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="UI.closeModal('modalSaida')">Cancelar</button>
+                <button class="btn btn-primary" id="btnSalvarSaida">Salvar Despesa</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/financeiro.js"></script>
+</body>
+
+</html>
+
